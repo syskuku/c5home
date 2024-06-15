@@ -70,6 +70,12 @@ const siteIcon = {
   Book,
   Fire,
   LaptopCode,
+  BloggerB, 
+  UserFriends, 
+  Rocketchat, 
+  Robot, 
+  Check, 
+  Heart
 };
 
 // 链接跳转
