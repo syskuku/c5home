@@ -1,13 +1,18 @@
 [
   {
+    "icon": "User",
+    "name": "账户管理",
+    "link": "https://auth.xn--e-0n6am96a.icu"
+  },
+  {
     "icon": "BloggerB",
-    "name": "主站",
+    "name": "文章站",
     "link": "https://www.xn--e-0n6am96a.icu"
   },
   {
     "icon": "UserFriends",
     "name": "随笔系统",
-    "link": "https://memos.xn--e-0n6am96a.icu"
+    "link": "https://memos.xn--e-0n6am96a.icu/auth"
   },
   {
     "icon": "Rocketchat",
