@@ -2,32 +2,32 @@
   {
     "icon": "User",
     "name": "账户管理",
-    "link": "https://auth.xn--e-0n6am96a.icu:50215"
+    "link": "https://auth.xn--e-0n6am96a.icu"
   },
   {
     "icon": "BloggerB",
     "name": "文章站",
-    "link": "https://www.xn--e-0n6am96a.icu:50215"
+    "link": "https://www.xn--e-0n6am96a.icu"
   },
   {
     "icon": "UserFriends",
     "name": "随笔系统",
-    "link": "https://memos.xn--e-0n6am96a.icu:50215/auth"
+    "link": "https://memos.xn--e-0n6am96a.icu/auth"
   },
   {
     "icon": "Rocketchat",
     "name": "聊天系统",
-    "link": "https://www.xn--e-0n6am96a.icu:50215/vocechat_login.php"
+    "link": "https://www.xn--e-0n6am96a.icu/vocechat_login.php"
   },
   {
     "icon": "Cloud",
     "name": "网盘系统",
-    "link": "https://alist.xn--e-0n6am96a.icu:50215"
+    "link": "https://alist.xn--e-0n6am96a.icu"
   },
   {
     "icon": "Robot",
     "name": "AI聊天",
-    "link": "https://ai.xn--e-0n6am96a.icu:50215/"
+    "link": "https://ai.xn--e-0n6am96a.icu/"
   },
   {
     "icon": "Check",
