@@ -2,41 +2,41 @@
   {
     "icon": "User",
     "name": "账户管理",
-    "link": "https://auth.xn--e-0n6am96a.icu"
+    "link": "https://auth.eyle.work"
   },
   {
     "icon": "BloggerB",
     "name": "文章站",
-    "link": "https://www.xn--e-0n6am96a.icu"
+    "link": "https://www.eyle.work"
   },
   {
     "icon": "UserFriends",
     "name": "随笔系统",
-    "link": "https://memos.xn--e-0n6am96a.icu/auth"
+    "link": "https://memos.eyle.work/auth"
   },
   {
     "icon": "Rocketchat",
     "name": "聊天系统",
-    "link": "https://www.xn--e-0n6am96a.icu/vocechat_login.php"
+    "link": "https://www.eyle.work/vocechat_login.php"
   },
   {
     "icon": "Cloud",
     "name": "网盘系统",
-    "link": "https://alist.xn--e-0n6am96a.icu"
+    "link": "https://alist.eyle.work"
   },
   {
     "icon": "Robot",
     "name": "AI聊天",
-    "link": "https://ai.xn--e-0n6am96a.icu/"
+    "link": "https://ai.eyle.work/"
   },
   {
     "icon": "Check",
     "name": "系统监控",
-    "link": "https://nezha.xn--e-0n6am96a.icu"
+    "link": "https://nezha.eyle.work"
   },
   {
     "icon": "Heart",
     "name": "服务监控",
-    "link": "https://status.xn--e-0n6am96a.icu/status/eon"
+    "link": "https://status.eyle.work/status/eon"
   }
 ]
