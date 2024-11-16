@@ -42,5 +42,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3.1.3
         with:
-          name: Home
+          name: Home1
           path: dist
