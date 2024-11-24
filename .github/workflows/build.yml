@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4.1.1
       # 安装 Node.js
       - name: Install Node.js
-        uses: actions/setup-node@v20.18.0
+        uses: actions/setup-node@v4.1.0
         with:
           node-version: "18.x"
       # 复制环境变量文件
