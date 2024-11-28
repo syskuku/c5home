@@ -290,6 +290,7 @@ const siteUrl = computed(() => {
   }
 
   &.blur {
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     background: rgb(0 0 0 / 25%);
     font-size: 16px;

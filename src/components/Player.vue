@@ -337,6 +337,10 @@ function showYrc() {
         };
         const computedStyle = window.getComputedStyle(intputItem);
         const width = parseFloat(computedStyle.width);
+        if (isNaN(width)) {
+          intputItem.removeAttribute('data-start');
+          return requestAnimationFrame(showYrc);
+        };
         const outputItem = outputDom[i];
         const animateOptions = {
           delay: Math.max(0, start - now),
@@ -362,6 +366,7 @@ function showYrc() {
     };
     requestAnimationFrame(showYrc);
   } catch (error) {
+    console.error(error);
     requestAnimationFrame(showYrc);
   };
 };
@@ -465,15 +470,14 @@ defineExpose({ playToggle, changeVolume, changeSong, toggleList });
         text-align: left;
         margin: 7px 0 6px 6px;
         height: 44px;
-        mask: linear-gradient(#fff 15%,
-            #fff 85%,
-            hsla(0deg, 0%, 100%, 0.6) 90%,
-            hsla(0deg, 0%, 100%, 0));
         -webkit-mask: linear-gradient(#fff 15%,
             #fff 85%,
             hsla(0deg, 0%, 100%, 0.6) 90%,
             hsla(0deg, 0%, 100%, 0));
-
+        mask: linear-gradient(#fff 15%,
+            #fff 85%,
+            hsla(0deg, 0%, 100%, 0.6) 90%,
+            hsla(0deg, 0%, 100%, 0));
         &::before,
         &::after {
           display: none;
