@@ -46,6 +46,7 @@ window.addEventListener("beforeunload", () => {
 
 app.use(pinia);
 app.mount("#app");
+const store = mainStore();
 
 // PWA
 navigator.serviceWorker.addEventListener("controllerchange", async () => {
