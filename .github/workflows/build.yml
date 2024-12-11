@@ -22,14 +22,14 @@ jobs:
         uses: actions/setup-node@v4.0.0
         with:
           node-version: "18.x"
-      # 复制环境变量文件
-      - name: Copy .env.example
-        run: |
-          if (-not (Test-Path .env)) {
-            Copy-Item .env.example .env
-          } else {
-            Write-Host ".env file already exists. Skipping the copy step."
-          }
+      # # 复制环境变量文件
+      # - name: Copy .env.example
+      #   run: |
+      #     if (-not (Test-Path .env)) {
+      #       Copy-Item .env.example .env
+      #     } else {
+      #       Write-Host ".env file already exists. Skipping the copy step."
+      #     }
       # 安装项目依赖
       - name: Install Dependencies
         run: npm install
@@ -38,6 +38,27 @@ jobs:
         run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          VITE_WEATHER_KEY: ${{ secrets.VITE_WEATHER_KEY }}
+
+          VITE_SITE_NAME: ${{ vars.VITE_SITE_NAME }}
+          VITE_SITE_AUTHOR: ${{ vars.VITE_SITE_AUTHOR }}
+          VITE_SITE_KEYWORDS: ${{ vars.VITE_SITE_KEYWORDS }}
+          VITE_SITE_DES: ${{ vars.VITE_SITE_DES }}
+          VITE_SITE_URL: ${{ vars.VITE_SITE_URL }}
+          VITE_SITE_LOGO: ${{ vars.VITE_SITE_LOGO }}
+          VITE_SITE_MAIN_LOGO: ${{ vars.VITE_SITE_MAIN_LOGO }}
+          VITE_SITE_APPLE_LOGO: ${{ vars.VITE_SITE_APPLE_LOGO }}
+          VITE_DESC_HELLO: ${{ vars.VITE_DESC_HELLO }}
+          VITE_DESC_TEXT: ${{ vars.VITE_DESC_TEXT }}
+          VITE_DESC_HELLO_OTHER: ${{ vars.VITE_DESC_HELLO_OTHER }}
+          VITE_DESC_TEXT_OTHER: ${{ vars.VITE_DESC_TEXT_OTHER }}
+          VITE_SITE_START: ${{ vars.VITE_SITE_START }}
+          VITE_SITE_ICP: ${{ vars.VITE_SITE_ICP }}
+          VITE_SONG_API: ${{ vars.VITE_SONG_API }}
+          VITE_SONG_SERVER: ${{ vars.VITE_SONG_SERVER }}
+          VITE_SONG_TYPE: ${{ vars.VITE_SONG_TYPE }}
+          VITE_SONG_ID: ${{ vars.VITE_SONG_ID }}
+
       # 上传构建产物
       - name: Upload artifacts
         uses: actions/upload-artifact@v3.1.3
