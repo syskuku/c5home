@@ -1,12 +1,17 @@
 [
   {
     "icon": "Blog",
-    "name": "博客",
+    "name": "博客 | Gredia",
     "link": "https://blog.jinvic.top/"
   },
   {
     "icon": "Cloud",
-    "name": "网盘",
+    "name": "网盘 | Alist",
     "link": "https://pan.jinvic.top/"
+  },
+  {
+    "icon": "Comment",
+    "name": "消息 | Gotify",
+    "link": "https://msg.jinvic.top/"
   }
 ]
