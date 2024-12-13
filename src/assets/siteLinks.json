@@ -13,5 +13,10 @@
     "icon": "Comment",
     "name": "消息 | Gotify",
     "link": "https://msg.jinvic.top/"
+  },
+  {
+    "icon": "Microblog",
+    "name": "微博 | Moments",
+    "link": "https://mblog.jinvic.top/"
   }
 ]
