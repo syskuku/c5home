@@ -134,7 +134,7 @@ const siteUrl = computed(() => {
 
   &.fade-in-start {
     text-shadow: 0px 0px 2px rgba(255, 240, 245, 1);
-    opacity: 0.6;
+    opacity: 0.6; // 初始显示的透明度
     transform: translateY(1px);
     transition:
       color 0.5s linear,
@@ -238,7 +238,7 @@ const siteUrl = computed(() => {
   }
 
   to {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 240, 245, 1);
     opacity: 1;
     text-shadow: 3px 3px 7px rgba(255, 240, 245, 1),
       0px 0px 12px rgba(255, 182, 193, 1),
@@ -259,7 +259,8 @@ const siteUrl = computed(() => {
   position: absolute;
   width: auto;
   opacity: 0.6;
-  text-shadow: 0 0 6px rgba(255, 240, 245, 1),
+  color: rgba(255, 240, 245, 1);
+  text-shadow: 0 0 6px rgba(0, 191, 255, 1),
     0px 0px 2px rgba(176, 224, 230, 1),
     0px 0px 2px rgba(230, 230, 250, 1);
   font-family: MiSans-Regular;
@@ -278,7 +279,7 @@ const siteUrl = computed(() => {
   opacity: 1;
   -webkit-background-clip: text;
   background-clip: text;
-  text-shadow: 0 0 6px rgba(255, 255, 255, 0.8),
+  text-shadow: 0 0 6px rgba(255, 240, 245, 1),
     0 0 2px rgba(255, 165, 0, 1),
     0 0 2px rgba(255, 179, 71, 1);
   font-family: MiSans-Regular;
@@ -288,6 +289,7 @@ const siteUrl = computed(() => {
 }
 
 // End
+
 
 
 #footer {

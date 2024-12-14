@@ -2,11 +2,11 @@
   <APlayer v-if="playList[0]" ref="player" :audio="playList" :autoplay="store.playerAutoplay" :theme="theme"
     :autoSwitch="false" :loop="store.playerLoop" :order="store.playerOrder" :volume="volume" :showLrc="true"
     :listFolded="listFolded" :listMaxHeight="listMaxHeight" :noticeSwitch="false" @play="onPlay" @pause="onPause"
-    @error="loadMusicError" />
+    @timeupdate="onTimeUp" @error="loadMusicError" />
 </template>
 
 <script setup>
-import { MusicOne, PlayWrong } from "@icon-park/vue-next";
+import { Float, MusicOne, PlayWrong } from "@icon-park/vue-next";
 import { getPlayerList } from "@/api";
 import { mainStore } from "@/store";
 import APlayer from "@worstone/vue-aplayer";
@@ -14,7 +14,9 @@ import { Speech, stopSpeech, SpeechLocal } from "@/utils/speech";
 import { decodeYrc } from "../utils/decodeYrc";
 
 const store = mainStore();
+let showYrcRunning = 0;
 let lastTimestamp = Date.now();
+let nowLineStart = -1;
 
 // 获取播放器 DOM
 const player = ref(null);
@@ -173,10 +175,10 @@ const onPause = () => {
   store.setPlayerState(player.value.audioRef.paused);
 };
 
-let nowLineStart = -1
 // 音频时间更新事件
 function showYrc() {
   // 至于为什么所有源的逐字都叫 YRC 呢...因为逐字功能本来是打算写网易云音乐独占的，但好像有些偏心了（bushi）...看了一下 qrc 和 yrc 没什么大区别，就顺带捏一起了。但是就懒得改变量名了！
+  showYrcRunning = 1;
   try {
     // 至于为什么要 try 呢？问得好！因为网易云接口时不时会返回一些令人费解的东西，比如没有时间轴、时间轴为负数（[20720,-4200]）、时间轴乱码，这些东西会造成模块直接卡死，除非刷新页面。暂时没有那么多纠错逻辑，为了防止模块死掉，就先加个 try 在这里复活自己。咕咕咕！
     if (player.value == null) {
@@ -221,10 +223,15 @@ function showYrc() {
             if (!songId) {
               return;
             };
-            const songUrlInfUrl = {
-              'netease': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
-              'tencent': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`
-            };
+            const songUrlInfUrl = store.playerYrcATDBF
+              ? {
+                'netease': `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
+                'tencent': `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`
+              }
+              : {
+                'netease': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
+                'tencent': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`
+              };
             if (!['netease', 'tencent'].includes(songServer)) {
               return;
             };
@@ -263,10 +270,15 @@ function showYrc() {
           const songIdlrc = songUrlInfw.get('id')
           const songServerlrc = songUrlInfw.get("server");
           if (songIdlrc) {
-            const songUrlInfwurl = {
-              'netease': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songIdlrc}.lrc`,
-              'tencent': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songIdlrc}.lrc`
-            };
+            const songUrlInfwurl = store.playerYrcATDBF
+              ? {
+                'netease': `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.lrc`,
+                'tencent': `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.lrc`
+              }
+              : {
+                'netease': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.lrc`,
+                'tencent': `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.lrc`
+              };
             if (!['netease', 'tencent'].includes(songServerlrc)) {
               return;
             };
@@ -365,13 +377,18 @@ function showYrc() {
       };
       nowLineStart = yrcFiltered.slice(-1)[0][0];
     };
-    requestAnimationFrame(showYrc);
+    return requestAnimationFrame(showYrc);
   } catch (error) {
     console.error(error);
+    return requestAnimationFrame(showYrc);
+  };
+};
+
+const onTimeUp = () => {
+  if (showYrcRunning == 0) {
     requestAnimationFrame(showYrc);
   };
 };
-requestAnimationFrame(showYrc);
 
 // 切换播放暂停事件
 const playToggle = () => {
@@ -479,6 +496,7 @@ defineExpose({ playToggle, changeVolume, changeSong, toggleList });
             #fff 85%,
             hsla(0deg, 0%, 100%, 0.6) 90%,
             hsla(0deg, 0%, 100%, 0));
+
         &::before,
         &::after {
           display: none;
