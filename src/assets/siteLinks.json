@@ -18,5 +18,10 @@
     "icon": "Microblog",
     "name": "微博 | Moments",
     "link": "https://mblog.jinvic.top/"
+  },
+  {
+    "icon": "Desktop",
+    "name": "远程 | RustDesk",
+    "link": "/images/rustdesk.svg"
   }
 ]
