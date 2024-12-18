@@ -5,6 +5,16 @@
     "link": "https://blog.jinvic.top/"
   },
   {
+    "icon": "Microblog",
+    "name": "微博 | Moments",
+    "link": "https://mblog.jinvic.top/"
+  },
+  {
+    "icon": "Book",
+    "name": "笔记 | Mkdocs",
+    "link": "https://note.jinvic.top/"
+  },
+  {
     "icon": "Cloud",
     "name": "网盘 | Alist",
     "link": "https://pan.jinvic.top/"
@@ -15,18 +25,13 @@
     "link": "https://msg.jinvic.top/"
   },
   {
-    "icon": "Microblog",
-    "name": "微博 | Moments",
-    "link": "https://mblog.jinvic.top/"
-  },
-  {
     "icon": "Desktop",
     "name": "远程 | RustDesk",
     "link": "/images/rustdesk.svg"
   },
   {
-    "icon": "Book",
-    "name": "笔记 | Mkdocs",
-    "link": "https://note.jinvic.top/"
+    "icon": "Key",
+    "name": "密码 | Bitwarden",
+    "link": "https://pwd.jinvic.top/"
   }
 ]
