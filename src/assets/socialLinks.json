@@ -1,15 +1,21 @@
 [
   {
     "name": "Github",
-    "icon": "/images/icon/github.png",
+    "icon": "https://github.com/fluidicon.png",
     "tip": "去 Github 看看",
     "url": "https://github.com/jinvic"
   },
   {
     "name": "BiliBili",
-    "icon": "/images/icon/bilibili.png",
+    "icon": "https://www.pctools.cc/tool/favicon/favicon.php?url=www.bilibili.com",
     "tip": "(゜-゜)つロ 干杯 ~",
     "url": "https://space.bilibili.com/434722198"
+  },
+  {
+    "name": "Bungumi",
+    "icon": "https://www.bgm.tv/img/favicon.ico",
+    "tip": "Bungumi 番组计划",
+    "url": "https://bgm.tv/user/738734"
   },
   {
     "name": "Email",
