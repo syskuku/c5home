@@ -23,5 +23,10 @@
     "icon": "Desktop",
     "name": "远程 | RustDesk",
     "link": "/images/rustdesk.svg"
+  },
+  {
+    "icon": "Book",
+    "name": "笔记 | Mkdocs",
+    "link": "https://note.jinvic.top/"
   }
 ]
