@@ -32,11 +32,11 @@
   {
     "icon": "Check",
     "name": "系统监控",
-    "link": "https://nezha.eyle.work"
+    "link": "https://nezha.eyle.work:45742"
   },
   {
     "icon": "Heart",
     "name": "服务监控",
-    "link": "https://status.eyle.work/status/eon"
+    "link": "https://kuma.eyle.work:45742/status/eon"
   }
 ]
