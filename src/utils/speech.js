@@ -159,7 +159,7 @@ export function SpeechLocal(fileName, delay = 0) {
       return;
     }
 
-    const audioUrl = `https://file.nanorocky.top/home/speechlocal/${fileName}`;
+    const audioUrl = `/speechlocal/${fileName}`;
 
     // 如果有现有的等待，取消之前的 timeout
     if (timeoutId) {

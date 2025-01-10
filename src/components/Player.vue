@@ -385,9 +385,15 @@ function showYrc() {
 };
 
 const onTimeUp = () => {
+  store.playerCurrentTime = player.value.audioStatus.playedTime;
+  store.playerDuration = player.value.audioStatus.duration;
   if (showYrcRunning == 0) {
     requestAnimationFrame(showYrc);
-  };
+  }
+};
+
+const onLoadStart = () => {
+
 };
 
 // 切换播放暂停事件
@@ -412,6 +418,7 @@ const changeSong = (type) => {
 const toggleList = () => {
   player.value.toggleList();
 };
+
 
 // 加载音频错误
 const loadMusicError = () => {
