@@ -51,26 +51,20 @@
               <paw />
             </Icon> -->
             <span class="yrc-box">
-            <span class="yrc-2 lrc-text text-hidden" id="yrc-2-wrap">
-              <span v-for="i in store.playerLrc" :key="`lrc-over-char-${i[2]}-${i[3]}`" v-html="i[4]">
+              <span class="yrc-2 lrc-text text-hidden" id="yrc-2-wrap">
+                <span v-for="i in store.playerLrc" :key="`lrc-over-char-${i[2]}-${i[3]}`" v-html="i[4]">
+                </span>
               </span>
-            </span>
-            <span class="yrc-1 lrc-text text-hidden" id="yrc-1-wrap">
-              <span v-for="i in store.playerLrc" :key="`lrc-char-${i[2]}-${i[3]}`" :class="[
-                'yrc-char',
-                i[0] && Number(i[6]) > 0 ? 'fade-in' : 'fade-in-start',
-                i[0] && Number(i[5]) > 1019 && Number(i[6]) > 0 ? 'long-tone' : 'fade-in-start',
-                i[0] && Number(i[6]) <= 0 ? 'fade-out' : '',
-                i[1] ? 'yrc-style-s2' : 'yrc-style-s1'
-              ]" :id="`lrc-char-${i[2]}-${i[3]}`" v-html="i[4]">
+              <span class="yrc-1 lrc-text text-hidden" id="yrc-1-wrap">
+                <span v-for="i in store.playerLrc" :key="`lrc-char-${i[2]}-${i[3]}`" :class="[
+                  'yrc-char',
+                  i[0] && Number(i[6]) > 0 ? 'fade-in' : 'fade-in-start',
+                  i[0] && Number(i[5]) > 1019 && Number(i[6]) > 0 ? 'long-tone' : 'fade-in-start',
+                  i[0] && Number(i[6]) <= 0 ? 'fade-out' : '',
+                  i[1] ? 'yrc-style-s2' : 'yrc-style-s1'
+                ]" :id="`lrc-char-${i[2]}-${i[3]}`" v-html="i[4]">
+                </span>
               </span>
-            </span>
-            <!-- <span class="yrc-2 lrc-text text-hidden" id="yrc-2-wrap">
-              <span v-for="i in store.playerLrc" :key="`lrc-over-char-${i[2]}-${i[3]}`" v-html="i[4]" />
-              </span>
-            <span class="yrc-1 lrc-text text-hidden" id="yrc-1-wrap">
-                <span v-for="i in store.playerLrc" :key="`lrc-char-${i[2]}-${i[3]}`" v-html="i[4]" />
-              </span> -->
             </span>
             <!-- <Icon size="20" style="transform: rotate(18deg);" class="paws-2">
               <paw />
@@ -102,18 +96,17 @@
 
 <script setup>
 import { MusicOne } from "@icon-park/vue-next";
-// import { Icon } from "@vicons/utils";
-// import { Paw } from "@vicons/ionicons5";
+import { Icon } from "@vicons/utils";
+import { Paw } from "@vicons/ionicons5";
 import { mainStore } from "@/store";
 import config from "@/../package.json";
 import { ref, watch, computed, onMounted, nextTick, onUpdated } from "vue";
 
 const store = mainStore();
-
 const fullYear = new Date().getFullYear();
-// const lrcContainer = ref(null);
-// const scrollPosition = ref(0);
-// const currentLine = ref(0);
+const lrcContainer = ref(null);
+const scrollPosition = ref(0);
+const currentLine = ref(0);
 const showProgressIcon = ref(false);
 
 const handleMouseEnter = () => {
@@ -200,17 +193,15 @@ const progressBarWidth = computed(() => {
 });
 
 // yrc part
-watch(() => store.getPlayerLrc, (_new,_old) => {
-  const isLineByLine = !store.yrcEnable || store.yrcTemp.length == 0 || store.yrcLoading
+watch(() => store.getPlayerLrc, (_new, _old) => {
+  const isLineByLine = !store.yrcEnable || store.yrcTemp.length == 0 || store.yrcLoading;
   if (!store.playerYrcShowPro || isLineByLine) {
-    return
+    return;
   };
-
-  // const now = player.value.audioStatus.playedTime * 1000;
-  const audio = document.querySelector('audio')
+  const audio = document.querySelector('audio');
   if (audio == undefined) {
-    return
-  }
+    return;
+  };
   const now = audio.currentTime * 1000;
   const yrc2 = document.getElementsByClassName("yrc-box")[0];
   if (yrc2 == undefined) {
@@ -221,16 +212,12 @@ watch(() => store.getPlayerLrc, (_new,_old) => {
   if (inputDom.length == 0 || outputDom.length == 0) {
     return;
   };
-  // console.log(store.yrcTemp[0][0])
-  const yrcFiltered = store.yrcTemp.filter((i) => i[0] < now &&  now < i[0] + i[1]);
+  const yrcFiltered = store.yrcTemp.filter((i) => i[0] < now && now < i[0] + i[1]);
   if (yrcFiltered.length == 0) {
-    // console.log('h')
     return;
   };
-  const nowLine = yrcFiltered[yrcFiltered.length - 1][2]
-  // console.log(nowLine)
+  const nowLine = yrcFiltered[yrcFiltered.length - 1][2];
   for (let i = 0; i < nowLine.length; i++) {
-    // console.log(JSON.stringify(nowLine[i]))
     const [[start, duration], _a, _b, _c] = nowLine[i];
     const inputItem = inputDom[i];
     if (!inputItem || inputItem.hasAttribute('data-start')) {
@@ -249,7 +236,7 @@ watch(() => store.getPlayerLrc, (_new,_old) => {
       fill: "forwards",
       easing: "linear",
     };
-    outputItem.style.transform = "translateY(-1px)"
+    outputItem.style.transform = "translateY(-1px)";
     const outputAnimate = outputItem.animate(
       [
         { width: 0 },
@@ -257,16 +244,24 @@ watch(() => store.getPlayerLrc, (_new,_old) => {
       ],
       animateOptions,
     );
-    // animationTmp.push(outputAnimate);
     outputAnimate.onfinish = () => {
       outputItem.style.transform = "translateY(1px)";
-      // animationTmp = animationTmp.filter(a => a !== outputAnimate);
+      outputItem.animate(
+        [
+          { transform: "translateY(-1px)" },
+          { transform: "translateY(1px)" },
+        ],
+        {
+          duration: 300,
+          fill: "forwards",
+          easing: "linear",
+        }
+      );
     };
-    inputItem.setAttribute("data-start",true)
+    inputItem.setAttribute("data-start", true);
   };
-})
+});
 
-// setInterval(yrcPro, 50);
 </script>
 
 <style lang="scss" scoped>
@@ -403,6 +398,11 @@ watch(() => store.getPlayerLrc, (_new,_old) => {
   white-space: nowrap;
   overflow: hidden;
   width: 0;
+  transition:
+    opacity 0.3s linear,
+    color 0.5s linear,
+    transform 0.3s linear,
+    width 0.3s linear;
 }
 
 #yrc-2-wrap {

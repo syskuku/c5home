@@ -1,24 +1,8 @@
 <template>
-  <APlayer
-    v-if="playList[0]"
-    ref="player"
-    :audio="playList"
-    :autoplay="store.playerAutoplay"
-    :theme="theme"
-    :autoSwitch="false"
-    :loop="store.playerLoop"
-    :order="store.playerOrder"
-    :volume="volume"
-    :showLrc="true"
-    :listFolded="listFolded"
-    :listMaxHeight="listMaxHeight"
-    :noticeSwitch="false"
-    @play="onPlay"
-    @pause="onPause"
-    @timeupdate="onTimeUp"
-    @error="loadMusicError"
-    @loadstart="onLoadStart"
-  />
+  <APlayer v-if="playList[0]" ref="player" :audio="playList" :autoplay="store.playerAutoplay" :theme="theme"
+    :autoSwitch="false" :loop="store.playerLoop" :order="store.playerOrder" :volume="volume" :showLrc="true"
+    :listFolded="listFolded" :listMaxHeight="listMaxHeight" :noticeSwitch="false" @play="onPlay" @pause="onPause"
+    @Loadstart="onLoadStart" @timeupdate="onTimeUp" @error="loadMusicError" />
 </template>
 
 <script setup>
@@ -112,7 +96,7 @@ onMounted(() => {
           navigator.mediaSession.setActionHandler("previoustrack", () => {
             changeSong(0); // 0 表示上一首
           });
-        }
+        };
         console.log("音乐加载完成");
       });
     } catch (err) {
@@ -132,80 +116,9 @@ onMounted(() => {
         const vstyle = import.meta.env.VITE_TTS_Style;
         SpeechLocal("播放器加载失败.mp3");
       }
-    }
+    };
   });
 });
-
-const fetchYrc = async (yrcUrl) => {
-  const yrcSource = await fetch(yrcUrl);
-  const yrcText = await yrcSource.text();
-  store.yrcIndex = playIndex.value;
-  if (yrcText.startsWith("[ch:0]")) {
-    store.yrcEnable = true;
-    store.yrcTemp = decodeYrc(yrcText);
-    store.yrcLoading = false;
-    return;
-  } else if (!store.playerYrcATDB) {
-    store.yrcEnable = false;
-    store.yrcTemp = [];
-    store.yrcLoading = false;
-    return;
-  }
-  // 接入 AMLL TTML Database
-  const songUrlInf = new URLSearchParams(new URL(yrcUrl).search);
-  const songId = songUrlInf.get("id");
-  const songServer = songUrlInf.get("server");
-  if (!songId) {
-    return;
-  }
-  const songUrlInfUrl = store.playerYrcATDBF
-    ? {
-        netease: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
-        tencent: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`,
-      }
-    : {
-        netease: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
-        tencent: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`,
-      };
-  if (!["netease", "tencent"].includes(songServer)) {
-    return;
-  }
-  try {
-    const amllUrl = songUrlInfUrl[songServer].replace("${songIdlrc}", songId);
-    const amllSource = await fetch(amllUrl);
-    const amllText = await amllSource.text();
-  } catch (e) {
-    console.log(e);
-    store.yrcEnable = true;
-    store.yrcTemp = decodeYrc(amllText);
-    store.yrcLoading = false;
-  }
-};
-
-function onLoadStart() {
-  try {
-    const aplayer = player.value.aplayer;
-    const lyrics = aplayer.lyrics[playIndex.value];
-    if (store.playerYrcShow != true) {
-      store.yrcEnable = false;
-      store.yrcTemp = [];
-      store.yrcLoading = false;
-      return;
-    }
-    if (store.yrcIndex == playIndex.value) {
-      return;
-    }
-    const yrcUrl = aplayer.audio[aplayer.index]["lrc"] + "&yrc=true";
-    store.yrcIndex = playIndex.value;
-    store.yrcLoading = true;
-    fetchYrc(yrcUrl);
-  } catch (error) {
-    store.yrcEnable = false;
-    store.yrcTemp = [];
-    store.yrcLoading = false;
-    console.error(error);
-  }
-}
 
 // 播放
 const onPlay = () => {
@@ -237,7 +150,7 @@ const onPlay = () => {
         },
       ],
     });
-  }
+  };
 
   if (store.webSpeech) {
     if (store.playerSpeechName) {
@@ -246,116 +159,20 @@ const onPlay = () => {
       const vstyle = import.meta.env.VITE_TTS_Style;
       Speech(
         "正在播放，“" +
-          store.getPlayerData.artist +
-          "”的歌曲，《" +
-          store.getPlayerData.name +
-          "》。",
+        store.getPlayerData.artist +
+        "”的歌曲，《" +
+        store.getPlayerData.name +
+        "》。",
         voice,
         vstyle,
       );
-    }
-  }
+    };
+  };
 };
 
 // 暂停
 const onPause = () => {
   store.setPlayerState(player.value.audioRef.paused);
-};
-
-function doLrcSync(lrc) {
-  const playerLyricIndex = player.value.aplayer.lyricIndex;
-  const output = [[true, 1, playerLyricIndex, 0, lrc]];
-  if (store.playerLrc.toString() != output.toString()) {
-    store.setPlayerLrc(output);
-    return;
-  }
-}
-
-function syncLrc() {
-  // 逐行模块
-  const aplayer = player.value.aplayer;
-  // console.log(playIndex.value)
-  const lyrics = aplayer.lyrics[playIndex.value];
-  const playerLyricIndex = player.value.aplayer.lyricIndex;
-  if (lyrics === undefined || lyrics[playerLyricIndex] === undefined) {
-    return doLrcSync("歌词加载中...");
-  }
-  let lrc = lyrics[playerLyricIndex][1];
-  if (lrc === "Loading") {
-    return doLrcSync("歌词加载中...");
-  } else if (lrc === "Not available" && !store.playerYrcATDB) {
-    return doLrcSync("歌词加载失败");
-  } else if (lrc === "Not availible") {
-    // 哈哈哈又是你（）
-    const songUrlInfw = new URLSearchParams(new URL(yrcUrl).search);
-    const songIdlrc = songUrlInfw.get("id");
-    const songServerlrc = songUrlInfw.get("server");
-    if (!songIdlrc) {
-      return doLrcSync("歌词加载失败");
-    }
-    const songUrlInfwurl = store.playerYrcATDBF
-      ? {
-          netease: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.lrc`,
-          tencent: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.lrc`,
-        }
-      : {
-          netease: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.lrc`,
-          tencent: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.lrc`,
-        };
-    if (!["netease", "tencent"].includes(songServerlrc)) {
-      return doLrcSync("歌词加载失败");
-    }
-    const amllUrllrc = songUrlInfwurl[songServerlrc].replace("${songIdlrc}", songIdlrc);
-    fetch(amllUrllrc)
-      .then((response) => response.text())
-      .catch(() => {
-        doLrcSync("歌词加载失败");
-      });
-    return doLrcSync("歌词加载中...");
-  }
-  doLrcSync(lrc);
-}
-
-function syncYrc() {
-  const now = player.value.audioStatus.playedTime * 1000;
-  const yrcFiltered = store.yrcTemp.filter((i) => i[0] < now);
-  const yrcLyric =
-    yrcFiltered.length > 0
-      ? yrcFiltered.slice(-1)[0][2].map((it) => {
-          const [[start, duration], word, line, row] = it;
-          const isCurrent = now >= start && now <= start + duration;
-          const isSungLyrics = start + duration < now;
-          const lessdur = start + duration - now;
-          return [isCurrent, isSungLyrics, line, row, word, duration, lessdur, "auto"];
-        })
-      : [[true, 1, 0, 0, `${store.playerTitle} - ${store.playerArtist}`]];
-  if (store.playerLrc.toString() != yrcLyric.toString()) {
-    store.setPlayerLrc(yrcLyric);
-  }
-}
-
-// 音频时间更新事件
-const onTimeUp = () => {
-  store.playerCurrentTime = player.value.audioStatus.playedTime;
-  store.playerDuration = player.value.audioStatus.duration;
-  // 至于为什么所有源的逐字都叫 YRC 呢...因为逐字功能本来是打算写网易云音乐独占的，但好像有些偏心了（bushi）...看了一下 qrc 和 yrc 没什么大区别，就顺带捏一起了。但是就懒得改变量名了！
-  showYrcRunning = 1;
-  try {
-    // 至于为什么要 try 呢？问得好！因为网易云接口时不时会返回一些令人费解的东西，比如没有时间轴、时间轴为负数（[20720,-4200]）、时间轴乱码，这些东西会造成模块直接卡死，除非刷新页面。暂时没有那么多纠错逻辑，为了防止模块死掉，就先加个 try 在这里复活自己。咕咕咕！
-    if (player.value == null) {
-      return;
-    }
-    const aplayer = player.value.aplayer;
-    // const isLineByLine = false;
-    const isLineByLine = !store.yrcEnable || store.yrcTemp.length == 0 || store.yrcLoading
-    if (isLineByLine) {
-      return syncLrc();
-    } else {
-      return syncYrc();
-    }
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 // 切换播放暂停事件
@@ -391,7 +208,7 @@ const loadMusicError = () => {
       const voice = import.meta.env.VITE_TTS_Voice;
       const vstyle = import.meta.env.VITE_TTS_Style;
       SpeechLocal("歌曲加载失败.mp3");
-    }
+    };
   } else {
     notice = "播放歌曲出现错误";
     if (store.webSpeech) {
@@ -399,8 +216,8 @@ const loadMusicError = () => {
       const voice = import.meta.env.VITE_TTS_Voice;
       const vstyle = import.meta.env.VITE_TTS_Style;
       SpeechLocal("播放器未知异常.mp3");
-    }
-  }
+    };
+  };
   ElMessage({
     message: notice,
     grouping: true,
@@ -414,6 +231,185 @@ const loadMusicError = () => {
     "播放歌曲: " + player.value.aplayer.audio[player.value.aplayer.index].name + " 出现错误",
   );
 };
+
+// 音频时间更新事件
+const fetchYrc = async (yrcUrl) => {
+  // 逐字接入模块
+  const yrcSource = await fetch(yrcUrl);
+  const yrcText = await yrcSource.text();
+  store.yrcIndex = playIndex.value;
+  if (yrcText.startsWith("[ch:0]")) {
+    store.yrcEnable = true;
+    store.yrcTemp = decodeYrc(yrcText);
+    store.yrcLoading = false;
+    return;
+  } else if (!store.playerYrcATDB) {
+    store.yrcEnable = false;
+    store.yrcTemp = [];
+    store.yrcLoading = false;
+    return;
+  };
+  // 接入 AMLL TTML Database
+  const songUrlInf = new URLSearchParams(new URL(yrcUrl).search);
+  const songId = songUrlInf.get("id");
+  const songServer = songUrlInf.get("server");
+  if (!songId) {
+    return;
+  };
+  const songUrlInfUrl = store.playerYrcATDBF
+    ? {
+      netease: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
+      tencent: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`,
+    }
+    : {
+      netease: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
+      tencent: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`,
+    };
+  if (!["netease", "tencent"].includes(songServer)) {
+    return;
+  };
+  try {
+    const amllUrl = songUrlInfUrl[songServer].replace("${songIdlrc}", songId);
+    const amllSource = await fetch(amllUrl);
+    const amllText = await amllSource.text();
+  } catch (e) {
+    console.log(e);
+    store.yrcEnable = true;
+    store.yrcTemp = decodeYrc(amllText);
+    store.yrcLoading = false;
+  };
+};
+
+function onLoadStart() {
+  // 逐字获取模块
+  try {
+    if (player.value == null || player.value.aplayer == null) {
+      return;
+    };
+    const aplayer = player.value.aplayer;
+    const lyrics = aplayer.lyrics[playIndex.value];
+    if (store.playerYrcShow != true) {
+      store.yrcEnable = false;
+      store.yrcTemp = [];
+      store.yrcLoading = false;
+      return;
+    };
+    if (store.yrcIndex == playIndex.value) {
+      return;
+    };
+    const yrcUrl = aplayer.audio[aplayer.index]["lrc"] + "&yrc=true";
+    store.yrcIndex = playIndex.value;
+    store.yrcLoading = true;
+    fetchYrc(yrcUrl);
+  } catch (error) {
+    store.yrcEnable = false;
+    store.yrcTemp = [];
+    store.yrcLoading = false;
+    console.error(error);
+  };
+};
+
+function syncLrc() {
+  if (player.value == null || player.value.aplayer == null) {
+    return;
+  };
+  // 逐行模块
+  const aplayer = player.value.aplayer;
+  const lyrics = aplayer.lyrics[playIndex.value];
+  const playerLyricIndex = player.value.aplayer.lyricIndex;
+  if (lyrics === undefined || lyrics[playerLyricIndex] === undefined) {
+    return doLrcSync("歌词加载中...");
+  };
+  let lrc = lyrics[playerLyricIndex][1];
+  if (lrc === "Loading") {
+    return doLrcSync("歌词加载中...");
+  } else if (lrc === "Not available" && !store.playerYrcATDB) {
+    return doLrcSync("歌词加载失败");
+  } else if (lrc === "Not availible") {
+    // 哈哈哈又是你（）
+    const songUrlInfw = new URLSearchParams(new URL(yrcUrl).search);
+    const songIdlrc = songUrlInfw.get("id");
+    const songServerlrc = songUrlInfw.get("server");
+    if (!songIdlrc) {
+      return doLrcSync("歌词加载失败");
+    };
+    const songUrlInfwurl = store.playerYrcATDBF
+      ? {
+        netease: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.lrc`,
+        tencent: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.lrc`,
+      }
+      : {
+        netease: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.lrc`,
+        tencent: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.lrc`,
+      };
+    if (!["netease", "tencent"].includes(songServerlrc)) {
+      return doLrcSync("歌词加载失败");
+    };
+    const amllUrllrc = songUrlInfwurl[songServerlrc].replace("${songIdlrc}", songIdlrc);
+    fetch(amllUrllrc)
+      .then((response) => response.text())
+      .catch(() => {
+        doLrcSync("歌词加载失败");
+      });
+    return doLrcSync("歌词加载中...");
+  };
+  doLrcSync(lrc);
+};
+
+const onTimeUp = () => {
+  store.playerCurrentTime = player.value.audioStatus.playedTime;
+  store.playerDuration = player.value.audioStatus.duration;
+  if (showYrcRunning == 0 && player.value != null && player.value.aplayer != null) {
+    requestAnimationFrame(syncYrc);
+  };
+};
+
+function doLrcSync(lrc) {
+  if (player.value == null || player.value.aplayer == null) {
+    return;
+  };
+  const playerLyricIndex = player.value.aplayer.lyricIndex;
+  const output = [[true, 1, playerLyricIndex, 0, lrc]];
+  if (store.playerLrc.toString() != output.toString()) {
+    store.setPlayerLrc(output);
+    return;
+  };
+};
+
+function syncYrc() {
+  showYrcRunning = 1;
+  try {
+    if (player.value == null || player.value.aplayer == null) {
+      return requestAnimationFrame(syncYrc);
+    };
+    const isLineByLine = !store.yrcEnable || store.yrcTemp.length == 0 || store.yrcLoading
+    if (isLineByLine) {
+      syncLrc();
+      return requestAnimationFrame(syncYrc);
+    } else {
+      // 逐行模块
+      const now = player.value.audioStatus.playedTime * 1000;
+      const yrcFiltered = store.yrcTemp.filter((i) => i[0] < now);
+      const yrcLyric =
+        yrcFiltered.length > 0
+          ? yrcFiltered.slice(-1)[0][2].map((it) => {
+            const [[start, duration], word, line, row] = it;
+            const isCurrent = now >= start && now <= start + duration;
+            const isSungLyrics = start + duration < now;
+            const lessdur = start + duration - now;
+            return [isCurrent, isSungLyrics, line, row, word, duration, lessdur, "auto"];
+          })
+          : [[true, 1, 0, 0, `${store.playerTitle} - ${store.playerArtist}`]];
+      if (store.playerLrc.toString() != yrcLyric.toString()) {
+        store.setPlayerLrc(yrcLyric);
+      };
+    };
+  } catch (error) {
+    console.error(error);
+  };
+  return requestAnimationFrame(syncYrc);
+};
+// 音频时间更新事件结束
 
 // 暴露子组件方法
 defineExpose({ playToggle, changeVolume, changeSong, toggleList });
@@ -456,18 +452,14 @@ defineExpose({ playToggle, changeVolume, changeSong, toggleList });
         text-align: left;
         margin: 7px 0 6px 6px;
         height: 44px;
-        -webkit-mask: linear-gradient(
-          #fff 15%,
-          #fff 85%,
-          hsla(0deg, 0%, 100%, 0.6) 90%,
-          hsla(0deg, 0%, 100%, 0)
-        );
-        mask: linear-gradient(
-          #fff 15%,
-          #fff 85%,
-          hsla(0deg, 0%, 100%, 0.6) 90%,
-          hsla(0deg, 0%, 100%, 0)
-        );
+        -webkit-mask: linear-gradient(#fff 15%,
+            #fff 85%,
+            hsla(0deg, 0%, 100%, 0.6) 90%,
+            hsla(0deg, 0%, 100%, 0));
+        mask: linear-gradient(#fff 15%,
+            #fff 85%,
+            hsla(0deg, 0%, 100%, 0.6) 90%,
+            hsla(0deg, 0%, 100%, 0));
 
         &::before,
         &::after {
