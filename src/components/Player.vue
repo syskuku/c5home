@@ -346,8 +346,8 @@ const onTimeUp = () => {
       return;
     }
     const aplayer = player.value.aplayer;
-    const isLineByLine = false;
-    // const isLineByLine = !store.yrcEnable || store.yrcTemp.length == 0 || store.yrcLoading
+    // const isLineByLine = false;
+    const isLineByLine = !store.yrcEnable || store.yrcTemp.length == 0 || store.yrcLoading
     if (isLineByLine) {
       return syncLrc();
     } else {
