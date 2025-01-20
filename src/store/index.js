@@ -31,7 +31,7 @@ export const mainStore = defineStore("main", {
     playerYrcShow: true, // 逐字歌词解析总开关
     playerYrcShowPro: true, // 逐字效果增强开关
     playerYrcATDB: true, // 允许接入 AMLL TTML Database
-    playerYrcATDBF: true, // 接入 AMLL TTML Database 时使用镜像加速
+    playerYrcATDBF: false, // 接入 AMLL TTML Database 时使用镜像加速
     playerCurrentTime: null, // 当前歌曲已播放时间
     playerDuration: null, // 当前歌曲总时长
     yrcIndex: -1, // 逐字歌词进度存储
