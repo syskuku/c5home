@@ -118,18 +118,66 @@ const changeMusicIndex = (type) => {
   playerRef.value.changeSong(type);
 };
 
-onMounted(() => {
-  // 空格键事件
-  window.addEventListener("keydown", (e) => {
-    if (!store.musicIsOk) {
-      return;
-    }
-    if (e.code == "Space") {
+// 键盘事件处理逻辑
+const handleKeydown = (e) => {
+  if (!store.musicIsOk) {
+    return;
+  }
+  switch (e.code) {
+    case "Space": // 播放/暂停
+      e.preventDefault(); // 阻止页面默认滚动
       changePlayState();
+      break;
+    case "PageUp": // 上一曲
+      e.preventDefault();
+      changeMusicIndex(0);
+      break;
+    case "PageDown": // 下一曲
+      e.preventDefault();
+      changeMusicIndex(1);
+      break;
+  }
+};
+
+// 动态注册/移除监听器
+const toggleKeyListener = (add) => {
+  if (add) {
+    window.addEventListener("keydown", handleKeydown);
+  } else {
+    window.removeEventListener("keydown", handleKeydown);
+  }
+};
+
+// 页面焦点检测
+const handleFocus = () => toggleKeyListener(true);
+const handleBlur = () => toggleKeyListener(false);
+
+onMounted(() => {
+  // 检测页面是否在窗口前端
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      toggleKeyListener(true); // 页面可见时监听
+    } else {
+      toggleKeyListener(false); // 页面不可见时移除监听
     }
   });
-  // 挂载方法至 window
-  window.$openList = openMusicList;
+
+  // 检测窗口焦点
+  window.addEventListener("focus", handleFocus);
+  window.addEventListener("blur", handleBlur);
+
+  // 初始化：若页面在前端，则监听
+  if (document.visibilityState === "visible") {
+    toggleKeyListener(true);
+  }
+});
+
+onUnmounted(() => {
+  // 清理所有监听器
+  toggleKeyListener(false);
+  window.removeEventListener("focus", handleFocus);
+  window.removeEventListener("blur", handleBlur);
+  document.removeEventListener("visibilitychange", handleFocus);
 });
 
 // 监听音量变化
@@ -147,6 +195,7 @@ watch(
   width: 100%;
   height: 100%;
   background: #00000040;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-radius: 6px;
   padding: 20px;
@@ -257,6 +306,7 @@ watch(
   width: 100%;
   height: 100%;
   background-color: #00000080;
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   z-index: 1;
   .list {

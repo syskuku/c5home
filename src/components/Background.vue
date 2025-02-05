@@ -1,22 +1,10 @@
 <template>
   <div :class="store.backgroundShow ? 'cover show' : 'cover'">
-    <img
-      v-show="store.imgLoadStatus"
-      :src="bgUrl"
-      class="bg"
-      alt="cover"
-      @load="imgLoadComplete"
-      @error.once="imgLoadError"
-      @animationend="imgAnimationEnd"
-    />
+    <img v-show="store.imgLoadStatus" :src="bgUrl" class="bg" alt="cover" @load="imgLoadComplete"
+      @error.once="imgLoadError" @animationend="imgAnimationEnd" />
     <div :class="store.backgroundShow ? 'gray hidden' : 'gray'" />
     <Transition name="fade" mode="out-in">
-      <a
-        v-if="store.backgroundShow && store.coverType != '3'"
-        class="down"
-        :href="bgUrl"
-        target="_blank"
-      >
+      <a v-if="store.backgroundShow && store.coverType != '3'" class="down" :href="bgUrl" target="_blank">
         下载壁纸
       </a>
     </Transition>
@@ -26,6 +14,9 @@
 <script setup>
 import { mainStore } from "@/store";
 import { Error } from "@icon-park/vue-next";
+import { Speech, stopSpeech, SpeechLocal } from "@/utils/speech";
+import initSnowfall from "@/utils/season/snow";
+import initFirefly from "@/utils/season/firefly";
 
 const store = mainStore();
 const bgUrl = ref(null);
@@ -46,7 +37,7 @@ const changeBg = (type) => {
     bgUrl.value = "https://api.vvhan.com/api/wallpaper/views";
   } else if (type == 3) {
     bgUrl.value = "https://api.vvhan.com/api/wallpaper/acg";
-  }
+  };
 };
 
 // 图片加载完成
@@ -77,6 +68,12 @@ const imgLoadError = () => {
     }),
   });
   bgUrl.value = `/images/background${bgRandom}.jpg`;
+  if (store.webSpeech) {
+    stopSpeech();
+    const voice = import.meta.env.VITE_TTS_Voice;
+    const vstyle = import.meta.env.VITE_TTS_Style;
+    SpeechLocal("壁纸加载失败.mp3");
+  };
 };
 
 // 监听壁纸切换
@@ -87,9 +84,26 @@ watch(
   },
 );
 
-onMounted(() => {
+const SeasonStyle = async () => {
+  if (store.seasonalEffects) {
+    const month = new Date().getMonth() + 1; // 当前月份，1-12
+    if ([12, 1, 2].includes(month)) {
+      initSnowfall();
+    };
+    if ([1, 2].includes(month)) {
+      await import("@/utils/season/lantern");
+    };
+    if ([7, 8, 9].includes(month)) {
+      initFirefly();
+    };
+  };
+};
+
+onMounted(async () => {
   // 加载壁纸
   changeBg(store.coverType);
+  // 加载季节特效
+  SeasonStyle();
 });
 
 onBeforeUnmount(() => {
@@ -126,6 +140,7 @@ onBeforeUnmount(() => {
     animation: fade-blur-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     animation-delay: 0.45s;
   }
+
   .gray {
     opacity: 1;
     position: absolute;
@@ -137,11 +152,13 @@ onBeforeUnmount(() => {
       radial-gradient(rgba(0, 0, 0, 0) 33%, rgba(0, 0, 0, 0.3) 166%);
 
     transition: 1.5s;
+
     &.hidden {
       opacity: 0;
       transition: 1.5s;
     }
   }
+
   .down {
     font-size: 16px;
     color: white;
@@ -159,10 +176,12 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+
     &:hover {
       transform: scale(1.05);
       background-color: #00000060;
     }
+
     &:active {
       transform: scale(1);
     }

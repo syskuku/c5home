@@ -35,6 +35,7 @@ const socialTip = ref("通过这里联系我吧");
   height: 42px;
   background-color: transparent;
   border-radius: 6px;
+  -webkit-backdrop-filter: blur(0);
   backdrop-filter: blur(0);
   animation: fade 0.5s;
   transition:
@@ -78,6 +79,7 @@ const socialTip = ref("通过这里联系我吧");
   @media (min-width: 768px) {
     &:hover {
       background-color: #00000040;
+      -webkit-backdrop-filter: blur(5px);
       backdrop-filter: blur(5px);
       .tip {
         display: block;
