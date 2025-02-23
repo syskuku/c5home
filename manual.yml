@@ -1,0 +1,19 @@
+# .github/workflows/manual-workflow.yml
+name: Manual Workflow
+
+# 允许手动触发
+on:
+  workflow_dispatch:
+    # 可以定义输入参数
+    inputs:
+      message:
+        description: 'Optional message'
+        required: false
+        default: 'No message provided'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print message
+        run: echo "Manual workflow triggered. Message: ${{ github.event.inputs.message }}"
