@@ -22,6 +22,9 @@ export default ({ mode }) =>
       }),
       VitePWA({
         registerType: "autoUpdate",
+        // 酪灰的小批注：如果遇到了子页面自动跳转主页等问题，或不需要客户端浏览器缓存，可尝试取消注释这两行代码，而不需要完全移除 PWA ~
+        // selfDestroying: true,
+        // injectRegister: false,
         workbox: {
           skipWaiting: true,
           clientsClaim: true,
@@ -106,8 +109,10 @@ export default ({ mode }) =>
     css: {
       preprocessorOptions: {
         scss: {
+          api: 'modern',
           charset: false,
           additionalData: `@use "@/style/global.scss" as global;`,
+          silenceDeprecations: ["legacy-js-api"],
         },
       },
     },

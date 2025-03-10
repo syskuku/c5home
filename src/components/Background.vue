@@ -23,21 +23,68 @@ const bgUrl = ref(null);
 const imgTimeout = ref(null);
 const emit = defineEmits(["loadComplete"]);
 
-// 壁纸随机数
-// 请依据文件夹内的图片个数修改 Math.random() 后面的第一个数字
-const bgRandom = Math.floor(Math.random() * 10 + 1);
+// 自定义壁纸
+// 酪灰的小批注：这里增加了从配置文件读取壁纸数的功能，使得在增加壁纸时不需要重新编译项目，只需修改这个 json 文件内的值
+// 设置一个默认值，防止在无法加载 JSON 文件时壁纸失效。应该尽量保证壁纸数始终不小于这个默认值
+let bgImageCount = 10; // PC 版壁纸
+let bgImageCountP = 2; // 移动版壁纸
+let bgRandom = 0;
+let bgRandomp = 0;
+
+// 加载 config.json
+async function loadConfig() {
+  try {
+    const response = await fetch('/images/config.json');
+    const data = await response.json();
+    bgImageCount = Math.max(data.bgImageCount, 1);
+    bgImageCountP = Math.max(data.bgImageCountP, 1);
+    bgRandom = Math.floor(Math.random() * bgImageCount + 1);
+    bgRandomp = Math.floor(Math.random() * bgImageCountP + 1);
+  } catch (error) {
+    console.error('无法加载壁纸配置文件:', error);
+    bgRandom = Math.floor(Math.random() * bgImageCount + 1);
+    bgRandomp = Math.floor(Math.random() * bgImageCountP + 1);
+  };
+};
+
+// 检测设备类型
+const detectDevice = () => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  if (/mobile|android|iphone|ipad|ipod|windows phone/.test(userAgent)) {
+    if (/ipad|tablet|playbook|silk|kindle/.test(userAgent)) {
+      return 'tablet'; // 平板
+    } else {
+      return 'mobile'; // 手机
+    };
+  } else {
+    return 'pc'; // PC
+  };
+};
 
 // 更换壁纸链接
 const changeBg = (type) => {
-  if (type == 0) {
-    bgUrl.value = `/images/background${bgRandom}.jpg`;
-  } else if (type == 1) {
-    bgUrl.value = "https://api.dujin.org/bing/1920.php";
-  } else if (type == 2) {
-    bgUrl.value = "https://api.vvhan.com/api/wallpaper/views";
-  } else if (type == 3) {
-    bgUrl.value = "https://api.vvhan.com/api/wallpaper/acg";
-  };
+  (async () => {
+    await loadConfig(); // 加载配置文件
+    const deviceType = detectDevice(); // 加载设备类型
+    if (type == 0) {
+      // 这里指定了所有自定义背景的文件格式，必须统一。可以自定义修改，比如 webp 或 png
+      // 酪灰的小批注：这里添加了设备类型识别以加载不同分辨率的壁纸
+      // 如果不需要区分设备类型，则只需要保留这一行 bgUrl.value = `/images/background${bgRandom}.jpg`;
+      if (deviceType === 'mobile') {
+        bgUrl.value = `/images/phone/backgroundphone${bgRandomp}.jpg`;
+      } else if (deviceType === 'tablet' || deviceType === 'pc') {
+        bgUrl.value = `/images/background${bgRandom}.jpg`;
+      } else {
+        bgUrl.value = `/images/background${bgRandom}.jpg`;
+      };
+    } else if (type == 1) {
+      bgUrl.value = "https://api.dujin.org/bing/1920.php";
+    } else if (type == 2) {
+      bgUrl.value = "https://api.vvhan.com/api/wallpaper/views";
+    } else if (type == 3) {
+      bgUrl.value = "https://api.vvhan.com/api/wallpaper/acg";
+    };
+  })();
 };
 
 // 图片加载完成

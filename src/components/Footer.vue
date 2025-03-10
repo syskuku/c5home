@@ -47,9 +47,9 @@
             :key="store.playerLrc.length != 0 ? `lrc-line-${store.playerLrc[0][2]}` : `lrc-line-null`">
             <music-one theme="filled" size="18" fill="#efefef" />
             &nbsp;
-            <!-- <Icon size="20" style="transform: rotate(-18deg);" class="paws-1">
+            <Icon size="20" style="transform: rotate(-18deg);" class="paws-1">
               <paw />
-            </Icon> -->
+            </Icon>
             <span class="yrc-box">
               <span class="yrc-2 lrc-text text-hidden" id="yrc-2-wrap">
                 <span v-for="i in store.playerLrc" :key="`lrc-over-char-${i[2]}-${i[3]}`" v-html="i[4]">
@@ -66,9 +66,9 @@
                 </span>
               </span>
             </span>
-            <!-- <Icon size="20" style="transform: rotate(18deg);" class="paws-2">
+            <Icon size="20" style="transform: rotate(18deg);" class="paws-2">
               <paw />
-            </Icon> -->
+            </Icon>
             &nbsp;
             <music-one theme="filled" size="18" fill="#efefef" />
           </div>
@@ -78,13 +78,13 @@
           <div class="lrc-all" :key="store.getPlayerLrc">
             <music-one theme="filled" size="18" fill="#efefef" />
             &nbsp;
-            <!-- <Icon size="20" style="transform: rotate(-18deg);" class="paws-3">
+            <Icon size="20" style="transform: rotate(-18deg);" class="paws-3">
               <paw />
-            </Icon> -->
+            </Icon>
             <span class="lrc-text text-hidden" v-html="store.getPlayerLrc[0][4]" :class="`lrc-char`" />
-            <!-- <Icon size="20" style="transform: rotate(18deg);" class="paws-4">
+            <Icon size="20" style="transform: rotate(18deg);" class="paws-4">
               <paw />
-            </Icon> -->
+            </Icon>
             &nbsp;
             <music-one theme="filled" size="18" fill="#efefef" />
           </div>

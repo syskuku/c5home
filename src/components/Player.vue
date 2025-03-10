@@ -258,8 +258,8 @@ const fetchYrc = async (yrcUrl) => {
   };
   const songUrlInfUrl = store.playerYrcATDBF
     ? {
-      netease: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
-      tencent: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`,
+      netease: `https://ghfast.top/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
+      tencent: `https://ghfast.top/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songId}.qrc`,
     }
     : {
       netease: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songId}.yrc`,
@@ -351,8 +351,8 @@ function syncYrcLrc() {
             } else {
               const songUrlInfwurl = store.playerYrcATDBF
                 ? {
-                  netease: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songIdlrc}.lrc`,
-                  tencent: `https://ghp.ci/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songIdlrc}.lrc`,
+                  netease: `https://ghfast.top/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songIdlrc}.lrc`,
+                  tencent: `https://ghfast.top/https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/qq-lyrics/${songIdlrc}.lrc`,
                 }
                 : {
                   netease: `https://raw.githubusercontent.com/Steve-xmh/amll-ttml-db/main/ncm-lyrics/${songIdlrc}.lrc`,
@@ -390,40 +390,46 @@ function syncYrcLrc() {
                         };
                       });
                     };
-                  };
-              };
-              const output = [[true, 1, playerLyricIndex, 0, lrc]];
-              if (store.playerLrc.toString() != output.toString()) {
-                store.setPlayerLrc(output);
+                  })
+                  .catch(() => {
+                    lrc = "歌词加载失败";
+                  });
               };
             };
           } else {
-            // 逐字模块
-            const now = player.value.audioStatus.playedTime * 1000;
-            const yrcFiltered = store.yrcTemp.filter((i) => i[0] < now);
-            const yrcLyric =
-              yrcFiltered.length > 0
-                ? yrcFiltered.slice(-1)[0][2].map((it) => {
-                  const [[start, duration], word, line, row] = it;
-                  const isCurrent = now >= start && now <= start + duration;
-                  const isSungLyrics = start + duration < now;
-                  const lessdur = start + duration - now;
-                  return [isCurrent, isSungLyrics, line, row, word, duration, lessdur, "auto"];
-                })
-                : [[true, 1, 0, 0, `${store.playerTitle} - ${store.playerArtist}`]];
-            if (store.playerLrc.toString() != yrcLyric.toString()) {
-              store.setPlayerLrc(yrcLyric);
+            const output = [[true, 1, playerLyricIndex, 0, lrc]];
+            if (store.playerLrc.toString() != output.toString()) {
+              store.setPlayerLrc(output);
             };
           };
         };
-      } catch (error) {
-        console.error(error);
+      } else {
+        // 逐字模块
+        const now = player.value.audioStatus.playedTime * 1000;
+        const yrcFiltered = store.yrcTemp.filter((i) => i[0] < now);
+        const yrcLyric =
+          yrcFiltered.length > 0
+            ? yrcFiltered.slice(-1)[0][2].map((it) => {
+              const [[start, duration], word, line, row] = it;
+              const isCurrent = now >= start && now <= start + duration;
+              const isSungLyrics = start + duration < now;
+              const lessdur = start + duration - now;
+              return [isCurrent, isSungLyrics, line, row, word, duration, lessdur, "auto"];
+            })
+            : [[true, 1, 0, 0, `${store.playerTitle} - ${store.playerArtist}`]];
+        if (store.playerLrc.toString() != yrcLyric.toString()) {
+          store.setPlayerLrc(yrcLyric);
+        };
       };
-      return requestAnimationFrame(syncYrcLrc);
     };
+  } catch (error) {
+    console.error(error);
+  };
+  return requestAnimationFrame(syncYrcLrc);
+};
 
-    // 暴露子组件方法
-    defineExpose({ playToggle, changeVolume, changeSong, toggleList });
+// 暴露子组件方法
+defineExpose({ playToggle, changeVolume, changeSong, toggleList });
 </script>
 
 <style lang="scss" scoped>
