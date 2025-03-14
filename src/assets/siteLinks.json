@@ -1,37 +1,32 @@
 [
   {
     "icon": "Blog",
-    "name": "博客",
-    "link": "https://blog.imsyy.top/"
+    "name": "班级主页",
+    "link": "class5blog.imikufans.com"
   },
   {
     "icon": "Cloud",
-    "name": "网盘",
-    "link": "https://pan.imsyy.top/"
-  },
-  {
-    "icon": "CompactDisc",
-    "name": "音乐",
-    "link": "https://music.imsyy.top/"
+    "name": "班级相册（暂未）",
+    "link": "class5blog.imikufans.com"
   },
   {
     "icon": "Compass",
-    "name": "起始页",
-    "link": "https://nav.imsyy.top/"
+    "name": "文科专用AI",
+    "link": "https://metaso.cn/?q=%E6%9C%9D%E4%B9%BE%E5%A4%95%E6%83%95%EF%BC%8C%E5%8A%9F%E4%B8%8D%E5%94%90%E6%8D%90%E3%80%82"
   },
   {
     "icon": "Book",
-    "name": "网址集",
-    "link": "https://web.imsyy.top/"
+    "name": "人民日报",
+    "link": "http://www.people.com.cn/"
   },
   {
     "icon": "Fire",
-    "name": "今日热榜",
-    "link": "https://hot.imsyy.top/"
+    "name": "搜图神器",
+    "link": "https://www.soutushenqi.com/home"
   },
   {
     "icon": "LaptopCode",
-    "name": "站点监测",
-    "link": "https://status.imsyy.top/"
+    "name": "理科Kimi AI",
+    "link": "https://kimi.moonshot.cn/"
   }
 ]
