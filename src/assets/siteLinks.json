@@ -1,37 +1,42 @@
 [
   {
     "icon": "Blog",
-    "name": "博客",
-    "link": "https://blog.imsyy.top/"
-  },
-  {
-    "icon": "Cloud",
-    "name": "网盘",
-    "link": "https://pan.imsyy.top/"
-  },
-  {
-    "icon": "CompactDisc",
-    "name": "音乐",
-    "link": "https://music.imsyy.top/"
-  },
-  {
-    "icon": "Compass",
-    "name": "起始页",
-    "link": "https://nav.imsyy.top/"
-  },
-  {
-    "icon": "Book",
-    "name": "网址集",
-    "link": "https://web.imsyy.top/"
+    "name": "5班主页",
+    "link": "https://class5blog.imikufans.com"
   },
   {
     "icon": "Fire",
-    "name": "今日热榜",
-    "link": "https://hot.imsyy.top/"
+    "name": "AI聊天（星野）",
+    "link": "https://chat.minimaxi.com/"
+  },
+  {
+    "icon": "Compass",
+    "name": "文科专用AI",
+    "link": "https://metaso.cn/?q=%E6%9C%9D%E4%B9%BE%E5%A4%95%E6%83%95%EF%BC%8C%E5%8A%9F%E4%B8%8D%E5%94%90%E6%8D%90%E3%80%82"
+  },
+  {
+    "icon": "Book",
+    "name": "人民日报",
+    "link": "http://www.people.com.cn/"
+  },
+  {
+    "icon": "Fire",
+    "name": "搜图神器",
+    "link": "https://www.soutushenqi.com/home"
   },
   {
     "icon": "LaptopCode",
-    "name": "站点监测",
-    "link": "https://status.imsyy.top/"
+    "name": "解题AI 可图片",
+    "link": "https://chatglm.cn//"
+  },
+  {
+    "icon": "Fire",
+    "name": "AI聚合",
+    "link": "https://bot.n.cn/"
+  },
+  {
+    "icon": "LaptopCode",
+    "name": "一数哔哩哔哩",
+    "link": "https://space.bilibili.com/14229967"
   }
 ]
