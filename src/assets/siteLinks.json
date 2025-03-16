@@ -5,9 +5,9 @@
     "link": "https://class5blog.imikufans.com"
   },
   {
-    "icon": "Cloud",
-    "name": "班级相册（暂未）",
-    "link": "https://class5blog.imikufans.com"
+    "icon": "Fire",
+    "name": "AI聊天（星野）",
+    "link": "https://chat.minimaxi.com/"
   },
   {
     "icon": "Compass",
@@ -26,7 +26,17 @@
   },
   {
     "icon": "LaptopCode",
-    "name": "理科Kimi AI",
-    "link": "https://kimi.moonshot.cn/"
+    "name": "解题AI 可图片",
+    "link": "https://chatglm.cn//"
+  },
+  {
+    "icon": "Fire",
+    "name": "AI聚合",
+    "link": "https://bot.n.cn/"
+  },
+  {
+    "icon": "LaptopCode",
+    "name": "一数哔哩哔哩",
+    "link": "https://space.bilibili.com/14229967"
   }
 ]
